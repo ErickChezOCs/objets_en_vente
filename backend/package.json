@@ -10,5 +10,8 @@
     "go-fullstack"
   ],
   "author": "based on Will-Alex's course @ OCs",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
