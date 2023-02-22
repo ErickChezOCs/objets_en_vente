@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const Thing = require('./models/Thing');
 
 
 dotenv.config({ path: './config/config.env'});
@@ -12,7 +13,6 @@ const app = express();
 
 app.use(express.json());
 
-
  app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin','*');
     res.setHeader('Access-Control-Allow-Headers','Origin,X-Requested-with,Content,Accept,Content-Type,Error,Authorization');
@@ -20,37 +20,34 @@ app.use(express.json());
     next();
  });
 
+ 
+
  app.post('/api/stuff', (req,res,next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message:'Objet créé!'
-    });
+    delete req.body._id;
+    const thing = new Thing({
+        ...req.body
+    })
+    thing.save()
+    .then( () => res.status(201).json({ message: "Objet créé et enregistré!"}))
+    .catch(error => res.status(400).json({error}));
+
  });
 
 /*app.use( 'url ou end point en premier argument) l'application frontend
 fait une requête sur cette route pour recevoir une réponse contenant la
 variable stuff ici définie */
+app.get('/api/stuff/:id',(req,res,next) =>{
+    Thing.findOne({_id:req.params.id})
+        .then(thing => res.status(200).json(thing))
+        .catch(error => res.status(404).json({error}));
+});
+
+
 app.get('/api/stuff',(req,res,next) => {
-    const stuff = [
-        {
-         _id :'leid1',
-         title : 'mon obje1',
-         description : 'les infos sur objet1',
-         imageUrl : 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg', 
-         price : 4900,
-         userId : 'lidduuser'
-        },
-        {
-            _id :'leid2',
-            title : 'mon obje2',
-            description : 'les infos sur objet2',
-            imageUrl : 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg', 
-            price : 2900,
-            userId : 'lidduuser'
-        }
-    ];
-    res.status(200).json(stuff);
-})
+  Thing.find()
+    .then(things => res.status(200).json(things))
+    .catch(error => res.status(400).json({error}));
+});
 
 
 
