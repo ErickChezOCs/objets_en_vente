@@ -1,8 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const Thing = require('./models/Thing');
-
+const stuffRoutes = require('./routes/stuff');
 
 dotenv.config({ path: './config/config.env'});
 
@@ -32,7 +31,7 @@ fait une requête sur cette route pour recevoir une réponse contenant la
 variable stuff ici définie */
 
 
-
+app.use('/api/stuff',stuffRoutes);
 
 
 module.exports = app;
