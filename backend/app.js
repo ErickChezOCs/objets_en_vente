@@ -33,6 +33,19 @@ app.use(express.json());
 
  });
 
+ app.put('/api/stuff/:id',(req,res,next) =>{
+    Thing.updateOne({_id:req.params.id}, {...req.body, _id:req.params.id})
+        .then( () => res.status(200).json({message : 'Objet modifié!'}))
+        .catch(error => res.status(404).json({error}));
+});
+
+app.delete('/api/stuff/:id',(req,res,next) =>{
+    Thing.deleteOne({_id:req.params.id})
+        .then( () => res.status(200).json({message : 'Objet supprimé!'}))
+        .catch(error => res.status(404).json({error}));
+});
+
+
 /*app.use( 'url ou end point en premier argument) l'application frontend
 fait une requête sur cette route pour recevoir une réponse contenant la
 variable stuff ici définie */
