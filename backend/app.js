@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const stuffRoutes = require('./routes/stuff');
+const userRoutes = require('./routes/user');
+
 
 dotenv.config({ path: './config/config.env'});
 
@@ -32,6 +34,8 @@ variable stuff ici définie */
 
 
 app.use('/api/stuff',stuffRoutes);
+
+app.use('/api/auth', userRoutes);
 
 
 module.exports = app;
